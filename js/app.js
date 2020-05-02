@@ -52,7 +52,17 @@ $('Document').ready(function() {
                 $('#auto-modal').modal();
                 $('#unvalidated-addr').click(function() {
                   payload.Address[0]['Verified'] = 'Bad';
-                  app.request("POST", "StartQuote/%(Location.0.Location.Zip)", payload, function(response) {
+                  $.ajax({
+                    url: 'https://test.ibqagents.com/ACME:webrate/Auto/StartQuote/'+ $('#zip').val() +'.json',
+                    type: 'POST',
+                    contentType: 'application/json;charset=utf-8',
+                    dataType: 'json',
+                    data: JSON.stringify(payload),
+                    error: function(err){
+                      console.log(err);
+                    },
+                  })
+                  .then(function () {
                     form_data['Quote'] = response.Quote;
                     form.saved();
                   });
